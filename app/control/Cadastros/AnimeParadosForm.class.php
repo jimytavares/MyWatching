@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_erros', 1);
 error_reporting(E_ALL);
 
-class AnimeRankingForm extends TPage
+class AnimeParadosForm extends TPage
 {
 
     private $form;
@@ -15,31 +15,36 @@ class AnimeRankingForm extends TPage
         parent::__construct();
 
 
-        $this->form = new BootstrapFormBuilder('form_anime_ranking');
-        $this->form->setFormTitle('Ranking de Animes');
-        $this->form->class = 'form_anime_ranking';
+        $this->form = new BootstrapFormBuilder('form_anime_parados');
+        $this->form->setFormTitle('Animes Parados');
+        $this->form->class = 'form_anime_parados';
 
         $id           = new THidden('id');
-        $ano          = new TDate('ano');
-        $nota         = new TEntry('nota');
+        $ep           = new TDate('ep');
+        $qntep        = new TEntry('qntep');
+        $situacao     = new TCombo('situacao');
         $comentario   = new TText('comentario');
         $ran_anime_id = new TDBCombo("ran_anime_id", "db_mywatching", "animeRecord", "id", "nome");
         
-        $ano->setSize("38%");
-        $nota->setSize("38%");
+        $ep->setSize("38%");
+        $qntep->setSize("38%");
+        $situacao->setSize("38%");
         $comentario->setSize("38%");
         $ran_anime_id->setSize("38%");
         
+        $situacao->addItems( [ "10" => "10", "15" => "15", "20" => "20", "25" => "25", "30" => "30" ] );
+        
         $this->form->addFields([$id]);
         $this->form->addFields([new TLabel('Nome:')],          [$ran_anime_id]);
-        $this->form->addFields([new TLabel('Nota: ')],         [$nota]);
-        $this->form->addFields([new TLabel('Ano do Anime: ')], [$ano]);
-        $this->form->addFields([new TLabel('Comentario: ')],   [$comentario]);
+        $this->form->addFields([new TLabel('Episódio: ')],         [$ep]);
+        $this->form->addFields([new TLabel('Quantidade Ep: ')], [$qntep]);
+        $this->form->addFields([new TLabel('Situação: ')], [$situacao]);
+        $this->form->addFields([new TLabel('Comentário: ')],   [$comentario]);
 
         $this->form->addFields([new TLabel('')], [TElement::tag('label', '<i>* Campos obrigatórios</i>' ) ]);
 
         $this->form->addAction('Salvar', new TAction(array($this, 'onSave')), 'fa:save')->class = 'btn btn-sm btn-primary';
-        $this->form->addAction('Voltar', new TAction(array('AnimeRankingList', 'onReload')), 'fa:arrow-left')->class = 'btn btn-sm btn-primary';
+        $this->form->addAction('Voltar', new TAction(array('AnimeParadosList', 'onReload')), 'fa:arrow-left')->class = 'btn btn-sm btn-primary';
 
         parent::add($this->form);
     }
@@ -50,7 +55,7 @@ class AnimeRankingForm extends TPage
 
             TTransaction::open('db_mywatching');
                 $this->form->validate();
-                $cadastro = $this->form->getData('AnimeRankingRecord');
+                $cadastro = $this->form->getData('AnimeParadosRecord');
                 $cadastro->store();
             TTransaction::close();
 
@@ -73,7 +78,7 @@ class AnimeRankingForm extends TPage
                 $key = $param['key'];
 
                 TTransaction::open('sample');
-                    $object = new AnimeRankingRecord($key);
+                    $object = new AnimeParadosRecord($key);
                     $this->form->setData($object);
                 TTransaction::close();
             }

@@ -1,8 +1,8 @@
-    <?php
+<?php
      
-    class AnimeRankingRecord extends TRecord
+    class AnimeParadosRecord extends TRecord
     {
-        const TABLENAME  = "ranking";
+        const TABLENAME  = "parados";
         const PRIMARYKEY = "id";
         const IDPOLICY   = "serial";
         

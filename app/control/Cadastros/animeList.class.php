@@ -1,4 +1,3 @@
-
 <?php
 
 class animeList extends TPage
@@ -12,8 +11,8 @@ class animeList extends TPage
     {
         parent::__construct();
         
-        $this->form = new BootstrapFormBuilder('anime_gimmy');
-        $this->datagrid = new BootstrapDatagridWrapper(new TQuickGrid);
+        $this->form = new BootstrapFormWrapper(new TQuickForm);
+        //grid antigo $this->datagrid = new TQuickGrid;
         
         $opcao = new TCombo('opcao');
         $nome  = new TEntry('nome');
@@ -26,14 +25,18 @@ class animeList extends TPage
 
         $opcao->setDefaultOption('..::SELECIONE::..');
 
-        $this->form->addFields( [ new TLabel( 'ID:' ) ], [ $opcao ] );        
-        $this->form->addFields( [ new TLabel( 'Nome:' )  ], [ $nome ] );
+        $this->form->addQuickField('Busca', $opcao, '80%');
+        $this->form->addQuickField('Nome', $nome, '80%');
 
-        $find_button = $this->form->addQuickAction( 'Buscar', new TAction(array($this, 'onSearch')), 'fa:search');
-        //$find_button->class = 'btn btn-sm btn-primary';
+        $find_button = $this->form->addQuickAction('Buscar', new TAction([$this, 'onSearch']),
+            'fa:search');
+        $find_button->class = 'btn btn-sm btn-primary';
 
-        $new_button = $this->form->addQuickAction( 'Novo' , new TAction(array('animeForm', 'onEdit')), 'fa:file');
-        //$new_button->class = 'btn btn-sm btn-primary';
+        $new_button = $this->form->addQuickAction('Novo', new TAction(['animeForm', 'onEdit']),
+            'fa:file');
+        $new_button->class = 'btn btn-sm btn-primary';
+        
+        $this->datagrid = new BootstrapDatagridWrapper(new TQuickGrid);
         
         $this->datagrid->addQuickColumn('Anime', 'nome', 'center');
         $this->datagrid->addQuickColumn('Episódio', 'ep', 'left');
@@ -56,17 +59,13 @@ class animeList extends TPage
         $this->datagrid->addAction( $actionEdit );
         
         $this->datagrid->createModel();
-        
-        //hp
-        $panel = new TPanelGroup('Cadastro de Animes');
-        $panel->add($this->datagrid);
-        $panel->addFooter('footer');
-        
-        $vbox = new TVBox;
-        //$vbox->add(new TXMLBreadCrumb('menu.xml', __CLASS__));
-        $vbox->add($panel);
 
-        parent::add($vbox);
+        $container = new TVBox();
+        $container->style = "width: 100%";
+        $container->add(TPanelGroup::pack('Cadastro de Animes', $this->form));
+        $container->add(TPanelGroup::pack(NULL, $this->datagrid));
+
+        parent::add($container);
     }
     
 	public function onReload( $param = NULL )

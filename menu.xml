@@ -4,11 +4,15 @@
         <menu>
               <menuitem label='Animes'>
                   <icon>fa:file-code-o fa-fw</icon>
-                  <action>animeForm</action>
+                  <action>animeList</action>
               </menuitem>
                 <menuitem label='Animes Ranking'>
                   <icon>fa:file-code-o fa-fw</icon>
                   <action>AnimeRankingList</action>
+              </menuitem>
+            <menuitem label='Animes Parados'>
+                  <icon>fa:file-code-o fa-fw</icon>
+                  <action>AnimeParadosList</action>
               </menuitem>
         </menu>
     </menuitem>

@@ -1,6 +1,6 @@
 <?php
 
-class AnimeRankingList extends TPage
+class AnimeParadosList extends TPage
 {
     private $datagrid;
     private $form;
@@ -32,18 +32,19 @@ class AnimeRankingList extends TPage
             'fa:search');
         $find_button->class = 'btn btn-sm btn-primary';
 
-        $new_button = $this->form->addQuickAction('Novo', new TAction(['AnimeRankingForm', 'onEdit']),
+        $new_button = $this->form->addQuickAction('Novo', new TAction(['AnimeParadosForm', 'onEdit']),
             'fa:file');
         $new_button->class = 'btn btn-sm btn-primary';
         
         $this->datagrid = new BootstrapDatagridWrapper(new TQuickGrid);
         
         $this->datagrid->addQuickColumn('Anime', 'nome_anime', 'center');
-        $this->datagrid->addQuickColumn('Nota', 'nota', 'left');
-        $this->datagrid->addQuickColumn('Ano', 'ano', 'left');
+        $this->datagrid->addQuickColumn('Episódio', 'ep', 'left');
+        $this->datagrid->addQuickColumn('Quant Ep', 'qntep', 'left');
+        $this->datagrid->addQuickColumn('Situação', 'situacao', 'left');
         $this->datagrid->addQuickColumn('Comentário', 'comentario', 'left');
 
-        $actionEdit = new TDataGridAction(array('AnimeRankingForm', 'onEdit'));
+        $actionEdit = new TDataGridAction(array('AnimeParadosForm', 'onEdit'));
         $actionEdit->setLabel('Editar');
         $actionEdit->setImage( "fa:pencil-square-o blue fa-lg" );
         $actionEdit->setField('id');
@@ -60,7 +61,7 @@ class AnimeRankingList extends TPage
 
         $container = new TVBox();
         $container->style = "width: 100%";
-        $container->add(TPanelGroup::pack('Ranking de Animes', $this->form));
+        $container->add(TPanelGroup::pack('Animes Parados', $this->form));
         $container->add(TPanelGroup::pack(NULL, $this->datagrid));
 
         parent::add($container);
@@ -71,7 +72,7 @@ class AnimeRankingList extends TPage
         try
         {
             TTransaction::open( "db_mywatching" );
-                $repository = new TRepository( "AnimeRankingRecord" );
+                $repository = new TRepository( "AnimeParadosRecord" );
                 if ( empty( $param[ "order" ] ) )
                 {
                     $param[ "order" ] = "id";
@@ -160,7 +161,7 @@ class AnimeRankingList extends TPage
         try {
 
             TTransaction::open('db_mywatching');
-                $object = new AnimeRankingRecord($param['key']);
+                $object = new AnimeParadosRecord($param['key']);
                 $object->delete();
             TTransaction::close();
 
